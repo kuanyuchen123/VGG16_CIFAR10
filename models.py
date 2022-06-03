@@ -6,12 +6,14 @@ import torch
 class Data(Dataset):
     def __init__(self, x, y):
         MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
-        normalize = ts.Normalize(mean=MEAN, std=STD)
-        self.x = normalize(torch.Tensor(x).permute(0,3,1,2))
+        self.normalize = ts.Normalize(mean=MEAN, std=STD)
+        self.x = torch.Tensor(x)
         self.y = torch.Tensor(y).to(dtype=int).squeeze(1)
 
     def __getitem__(self, index):
-        return self.x[index], self.y[index]
+        x = self.normalize(self.x[index].permute(2,0,1))
+        y = self.y[index]
+        return x, y
 
     def __len__(self):
         return len(self.x)
