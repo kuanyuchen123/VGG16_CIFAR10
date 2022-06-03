@@ -7,8 +7,8 @@ class Data(Dataset):
     def __init__(self, x, y):
         MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
         self.normalize = ts.Normalize(mean=MEAN, std=STD)
-        self.x = torch.Tensor(x)
-        self.y = torch.Tensor(y).to(dtype=int).squeeze(1)
+        self.x = torch.tensor(x, dtype=torch.float32)
+        self.y = torch.tensor(y, dtype=torch.int32).squeeze(1)
 
     def __getitem__(self, index):
         x = self.normalize(self.x[index].permute(2,0,1))
